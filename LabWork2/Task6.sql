@@ -43,27 +43,23 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20001, 'UPDATE_C_VAL_IN_GROUP_TRIGGER!: ' || SQLERRM);
 END;
 
-
+------------------------------------------------
 CREATE OR REPLACE TRIGGER UPDATE_GROUP_C_VAL
 AFTER INSERT OR DELETE OR UPDATE OF GROUP_ID ON STUDENTS
 FOR EACH ROW
 DECLARE
     v_student_count NUMBER;
 BEGIN
-    -- Проверка наличия изменений в GROUP_ID
     IF INSERTING OR UPDATING THEN
-        -- Если новая группа указана, увеличиваем C_VAL для новой группы
         IF :NEW.GROUP_ID != :OLD.GROUP_ID THEN
             SELECT COUNT(*) INTO v_student_count FROM STUDENTS WHERE GROUP_ID = :NEW.GROUP_ID;
             UPDATE GROUPS SET C_VAL = v_student_count WHERE ID = :NEW.GROUP_ID;
         END IF;
-        -- Если старая группа указана, уменьшаем C_VAL для старой группы
         IF :OLD.GROUP_ID IS NOT NULL THEN
             SELECT COUNT(*) INTO v_student_count FROM STUDENTS WHERE GROUP_ID = :OLD.GROUP_ID;
             UPDATE GROUPS SET C_VAL = v_student_count WHERE ID = :OLD.GROUP_ID;
         END IF;
     ELSIF DELETING THEN
-        -- Если удаляется студент, уменьшаем C_VAL для его группы
         SELECT COUNT(*) INTO v_student_count FROM STUDENTS WHERE GROUP_ID = :OLD.GROUP_ID;
         UPDATE GROUPS SET C_VAL = v_student_count WHERE ID = :OLD.GROUP_ID;
     END IF;

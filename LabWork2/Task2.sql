@@ -43,13 +43,20 @@ FOR EACH ROW
 DECLARE
     id_count NUMBER;
 BEGIN
-    IF :OLD.ID != :NEW.ID THEN
-        id_count:=0;
+    id_count:=0;
+    IF INSERTING THEN
         SELECT COUNT(*) INTO id_count FROM STUDENTS WHERE ID = :NEW.ID;
         IF id_count > 0 THEN
             RAISE_APPLICATION_ERROR(-20001, 'ID MUST BE UNIQUE!');
         END IF;
-        
+    ELSIF UPDATING THEN
+        IF :OLD.ID != :NEW.ID THEN
+            id_count:=0;
+            SELECT COUNT(*) INTO id_count FROM STUDENTS WHERE ID = :NEW.ID;
+            IF id_count > 0 THEN
+                RAISE_APPLICATION_ERROR(-20001, 'ID MUST BE UNIQUE!');
+            END IF;
+        END IF;
     END IF;
 EXCEPTION
     WHEN OTHERS THEN
@@ -64,10 +71,18 @@ FOR EACH ROW
 DECLARE
     id_count NUMBER;
 BEGIN
-    IF :OLD.ID != :NEW.ID THEN
+    id_count := 0;
+    IF INSERTING THEN
         SELECT COUNT(*) INTO id_count FROM GROUPS WHERE ID = :NEW.ID;
         IF id_count > 0 THEN
             RAISE_APPLICATION_ERROR(-20001, 'ID MUST BE UNIQUE!');
+        END IF;
+    ELSIF UPDATING THEN
+        IF :OLD.ID != :NEW.ID THEN
+            SELECT COUNT(*) INTO id_count FROM GROUPS WHERE ID = :NEW.ID;
+            IF id_count > 0 THEN
+                RAISE_APPLICATION_ERROR(-20001, 'ID MUST BE UNIQUE!');
+            END IF;
         END IF;
     END IF;
 EXCEPTION

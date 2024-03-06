@@ -16,3 +16,6 @@ EXCEPTION
 END;
 
 Delete from students_audit;
+
+SELECT *
+FROM user_errors
