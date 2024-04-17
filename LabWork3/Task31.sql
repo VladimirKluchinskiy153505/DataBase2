@@ -19,6 +19,10 @@ AS
     loop_detected BOOLEAN := FALSE;
     recursion_depth NUMBER := 0;
     
+      TYPE tables_names_arr IS TABLE OF VARCHAR2(100);
+     visited_arr tables_names_arr:=tables_names_arr();
+    
+    
     PROCEDURE detect_loop (
         start_table_name IN VARCHAR2,
         current_table_name IN VARCHAR2,
@@ -34,6 +38,9 @@ AS
             AND a.owner = dev_schema_name;
         next_table_name VARCHAR2(100);
     BEGIN
+        visited_arr.EXTEND;
+        visited_arr(visited_arr.COUNT):=current_table_name;
+        
         FOR fk_rec IN fk_cur LOOP
             next_table_name := fk_rec.table_name;
              DBMS_OUTPUT.PUT_LINE('Table Name from constraint'|| next_table_name);
@@ -143,8 +150,11 @@ BEGIN
         
         -- Check for circular dependencies
         loop_detected := FALSE;
-        recursion_depth := 0;
-        detect_loop(dev_table_name, dev_table_name, recursion_depth);
+        IF (dev_table_name NOT MEMBER OF visited_arr) THEN
+            recursion_depth := 0;
+            detect_loop(dev_table_name, dev_table_name, recursion_depth);
+        
+        END IF;
         DBMS_OUTPUT.PUT_LINE('CycleEnded: '||dev_table_name);
     END LOOP;
     
