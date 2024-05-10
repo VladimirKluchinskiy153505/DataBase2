@@ -1,0 +1,10 @@
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (1, 'Abramovich Pavel Nikolaevich', 20);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (2,'Bybko Alina Andreevna', 21);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (3,'Bychko Vasily Pavlovich', 19);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (4,'Glebtsova Elizaveta Nikolaevna', 22);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (5,'Grischuk Alexander Olegovich', 18);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (6,'Korotkiy Pavel Igorevich', 23);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (7,'Kosach Dmitry Anatolyevich', 30);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (8,'Kudlasevich Artur Ivanovich', 25);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (9,'Pihtovnikova Maria Timurovna', 17);
+INSERT INTO STUDENTS(ID, NAME, AGE) VALUES (10,'Stovba Vladislav Alexandrovich', 29);
